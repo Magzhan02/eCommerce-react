@@ -4,7 +4,11 @@ type PopupClick = MouseEvent & {
   path: Node[];
 };
 
-const sortPopupName = ['популярности', 'цене', 'алфавиту'];
+const sortPopup = [
+  { name: 'популярности', sortProperty: 'rating' },
+  { name: 'цене', sortProperty: 'price' },
+  { name: 'алфавиту', sortProperty: 'title' },
+];
 
 const Sort: React.FC = () => {
   const sortRef = React.useRef<HTMLDivElement>(null);
@@ -23,8 +27,8 @@ const Sort: React.FC = () => {
     return () => document.body.removeEventListener('click', handleOutsideClick);
   }, []);
 
-  const sortPopupToggle = (sort: string) => {
-    setValue(sort);
+  const sortPopupToggle = (obj: any) => {
+    setValue(obj.name);
     setOpen(false);
   };
 
@@ -48,12 +52,12 @@ const Sort: React.FC = () => {
       {open && (
         <div className="sort__popup">
           <ul>
-            {sortPopupName.map((sort, i) => (
+            {sortPopup.map((obj, i) => (
               <li
                 key={i}
-                className={value === sort ? 'active' : ' '}
-                onClick={() => sortPopupToggle(sort)}>
-                {sort}
+                className={value === obj.name ? 'active' : ' '}
+                onClick={() => sortPopupToggle(obj)}>
+                {obj.name}
               </li>
             ))}
           </ul>

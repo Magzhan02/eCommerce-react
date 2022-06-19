@@ -1,0 +1,41 @@
+.searchBlock {
+    position: relative;
+    right: 50px;
+
+    .icon {
+        position: absolute;
+        width: 20px;
+        height: 20px;
+        top: 7px;
+        left: 8px;
+    }
+
+    input {
+        border: 1px solid rgba($color: #000000, $alpha: 0.1);
+        padding: 8px 15px;
+        width: 400px;
+        border-radius: 10px;
+        font-size: 16px;
+        padding-left: 35px;
+        padding-right: 30px;
+        transition: all 0.3s ease-in-out;
+
+        &:focus {
+            border: 1px solid rgba($color: #000000, $alpha: 0.3);
+        }
+    }
+
+    .clear {
+        position: absolute;
+        width: 18px;
+        height: 18px;
+        top: 9px;
+        right: 9px;
+        opacity: 0.2;
+        cursor: pointer;
+
+        &:hover {
+            opacity: 0.8;
+        }
+    }
+}

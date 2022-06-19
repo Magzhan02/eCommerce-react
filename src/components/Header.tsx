@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 import logoSvg from '../assets/pizza-logo.svg';
+import Search from './Search';
 
 const Header = () => {
   return (
@@ -15,6 +16,7 @@ const Header = () => {
           </div>
         </Link>
       </div>
+      <Search />
       <div className="header__cart">
         <Link to="/cart" className="button button--cart">
           <span>520 $</span>
