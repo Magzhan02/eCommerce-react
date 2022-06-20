@@ -28,4 +28,9 @@ from './NotFoundBlock';
 export {
     default as CartItem
 }
-from './CartItem.tsx'
+from './CartItem.tsx';
+
+export {
+    default as Pagination
+}
+from './Pagination';
