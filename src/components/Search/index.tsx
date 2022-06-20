@@ -1,8 +1,11 @@
 import React from 'react';
 
 import styles from './search.module.scss';
+import { SearchContext } from '../../App';
 
 const Search = () => {
+  const { searchValue, setSearchValue } = SearchContext();
+
   return (
     <div className={styles.searchBlock}>
       <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" className={styles.icon}>
@@ -11,7 +14,12 @@ const Search = () => {
           fill="#ccc"
         />
       </svg>
-      <input type="text" placeholder="Поиск пиццы..." />
+      <input
+        type="text"
+        placeholder="Поиск пиццы..."
+        onChange={(event) => setSearchValue(event.target.value)}
+        value={searchValue}
+      />
       <svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" className={styles.clear}>
         <path d="M10 8.586L2.929 1.515 1.515 2.929 8.586 10l-7.071 7.071 1.414 1.414L10 11.414l7.071 7.071 1.414-1.414L11.414 10l7.071-7.071-1.414-1.414L10 8.586z" />
       </svg>

@@ -2,8 +2,10 @@ import React from 'react';
 import axios from 'axios';
 
 import { Card, Categories, Sort, Skeleton, Pagination } from '../components';
+import { SearchContext } from '../App';
 
 const Home: React.FC = () => {
+  const { searchValue } = SearchContext();
   const [pizzas, setPizzas] = React.useState<any>([]);
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const [categoryId, setCategoryId] = React.useState<number>(0);
@@ -22,7 +24,7 @@ const Home: React.FC = () => {
     };
     fetchPizzas();
     window.scrollTo(0, 0);
-  }, [categoryId, currentPage]);
+  }, [categoryId, currentPage, searchValue]);
 
   const onClickCategory = React.useCallback((id: number) => {
     setCategoryId(id);
@@ -33,7 +35,15 @@ const Home: React.FC = () => {
     setCurrentPage(page);
   };
 
-  const items = pizzas.map((obj: any) => <Card key={obj.id} {...obj} />);
+  const items = pizzas
+    .filter((obj: any) => {
+      if (obj.title.toLowerCase().includes(searchValue)) {
+        return true;
+      }
+      return false;
+    })
+    .map((obj: any) => <Card key={obj.id} {...obj} />);
+
   const skeletons = [...new Array(6)].map((_, index) => <Skeleton key={index} />);
 
   return (
