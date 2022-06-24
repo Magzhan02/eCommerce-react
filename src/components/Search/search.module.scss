@@ -38,4 +38,57 @@
             opacity: 0.8;
         }
     }
+
+    @media (max-width: 1150px) {
+        right: 30px;
+
+        input {
+            width: 300px;
+        }
+    }
+
+    @media (max-width: 970px) {
+        right: 10px;
+        margin: 0 20px;
+
+        input {
+            width: 300px;
+        }
+    }
+
+    @media (max-width: 815px) {
+        right: 20px;
+
+        input {
+            width: 250px;
+        }
+    }
+
+    @media (max-width: 768px) {
+        right: 20px;
+
+        input {
+            width: 150px;
+            font-size: 14px;
+        }
+    }
+
+    @media (max-width: 675px) {
+        right: 15px;
+
+        input {
+            width: 150px;
+            font-size: 14px;
+        }
+    }
+
+    @media (max-width: 645px) {
+        right: 0px;
+        margin-bottom: 20px;
+
+        input {
+            width: 150px;
+            font-size: 14px;
+        }
+    }
 }
