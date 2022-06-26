@@ -4,7 +4,7 @@ const categories = ['Все', 'Мясные', 'Вегетарианская', '�
 
 type CategoriesProps = {
   id: number;
-  onClickCategory: (id: number) => void;
+  onClickCategory: (idx: number) => void;
 };
 
 const Categories: React.FC<CategoriesProps> = React.memo(({ id, onClickCategory }) => {

@@ -1,15 +1,23 @@
 import React from 'react';
 import axios from 'axios';
+import { useSelector } from 'react-redux';
+
+import { useAppDispatch } from '../redux/store';
+import { selectedFilter } from '../redux/filter/selectors';
+import { setCategoryId, setCurrentPage } from '../redux/filter/slice';
 
 import { Card, Categories, Sort, Skeleton, Pagination } from '../components';
 import { SearchContext } from '../App';
 
 const Home: React.FC = () => {
+  const dispatch = useAppDispatch();
+
   const { searchValue } = SearchContext();
+
   const [pizzas, setPizzas] = React.useState<any>([]);
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
-  const [categoryId, setCategoryId] = React.useState<number>(0);
-  const [currentPage, setCurrentPage] = React.useState<number>(1);
+
+  const { categoryId, currentPage } = useSelector(selectedFilter);
 
   React.useEffect(() => {
     const fetchPizzas = async () => {
@@ -26,13 +34,13 @@ const Home: React.FC = () => {
     window.scrollTo(0, 0);
   }, [categoryId, currentPage, searchValue]);
 
-  const onClickCategory = React.useCallback((id: number) => {
-    setCategoryId(id);
-    setCurrentPage(1);
+  const onClickCategory = React.useCallback((idx: number) => {
+    dispatch(setCategoryId(idx));
+    onChangePage(1);
   }, []);
 
   const onChangePage = (page: number) => {
-    setCurrentPage(page);
+    dispatch(setCurrentPage(page));
   };
 
   const items = pizzas

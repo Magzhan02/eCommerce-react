@@ -22,7 +22,7 @@ export const SearchContext = () => React.useContext(MySearchContext);
 
 const App = () => {
   const [searchValue, setSearchValue] = React.useState<string>('');
-  console.log(searchValue);
+
   return (
     <MySearchContext.Provider value={{ searchValue, setSearchValue }}>
       <Routes>
