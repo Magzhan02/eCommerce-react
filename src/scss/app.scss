@@ -95,6 +95,23 @@ body {
                 }
             }
         }
+
+    }
+
+    &__error {
+        width: 500px;
+        margin: 100px auto;
+        text-align: center;
+
+        h2 {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        a {
+            font-size: 20px;
+        }
     }
 }
 
@@ -110,8 +127,9 @@ body {
             margin: 0;
         }
     }
-
 }
+
+
 
 .cart {
     &__top {
@@ -171,9 +189,13 @@ body {
         }
     }
 
+
+
     .content__items {
         display: block;
     }
+
+
 
     &__item {
         display: flex;

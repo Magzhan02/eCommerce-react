@@ -5,7 +5,7 @@ const initialState: FilterState = {
   categoryId: 0,
   currentPage: 1,
   sort: {
-    name: 'популярности',
+    name: 'популярности (DESC)',
     sortProperty: SortPropertyEnum.RATING_DESC,
   },
 };
@@ -23,12 +23,9 @@ const filterSlice = createSlice({
     setCurrentPage(state, action: PayloadAction<number>) {
       state.currentPage = action.payload;
     },
-    setFilters(state, action: PayloadAction<FilterState>) {
-      state.sort = action.payload.sort;
-    },
   },
 });
 
-export const { setCategoryId, setSort, setCurrentPage, setFilters } = filterSlice.actions;
+export const { setCategoryId, setSort, setCurrentPage } = filterSlice.actions;
 
 export default filterSlice.reducer;

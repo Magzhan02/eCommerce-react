@@ -1,49 +1,57 @@
 import React from 'react';
-import axios from 'axios';
 import { useSelector } from 'react-redux';
 
 import { useAppDispatch } from '../redux/store';
-import { selectedFilter } from '../redux/filter/selectors';
-import { setCategoryId, setCurrentPage } from '../redux/filter/slice';
+import { selectedFilter } from '../redux/filter/selector';
+import { itemsData } from '../redux/items/selector';
+
+import { setCategoryId, setCurrentPage, setSort } from '../redux/filter/slice';
+import { Sort as SortType } from '../redux/filter/types';
+import { fetchItems } from '../redux/items/asyncAction';
 
 import { Card, Categories, Sort, Skeleton, Pagination } from '../components';
 import { SearchContext } from '../App';
 
 const Home: React.FC = () => {
   const dispatch = useAppDispatch();
-
   const { searchValue } = SearchContext();
 
-  const [pizzas, setPizzas] = React.useState<any>([]);
-  const [isLoading, setIsLoading] = React.useState<boolean>(false);
-
-  const { categoryId, currentPage } = useSelector(selectedFilter);
+  const { categoryId, currentPage, sort } = useSelector(selectedFilter);
+  const { items, isLoading } = useSelector(itemsData);
 
   React.useEffect(() => {
-    const fetchPizzas = async () => {
-      setIsLoading(false);
-      const { data } = await axios.get(
-        `https://629e069a3dda090f3c11d3a1.mockapi.io/item?page=${currentPage}&limit=8&category=${
-          categoryId > 0 ? categoryId : ''
-        }`,
+    const fetchItemsData = async () => {
+      const sortBy = sort.sortProperty.replace('-', '');
+      const orderBy = sort.sortProperty.includes('-') ? 'asc' : 'desc';
+      const category = categoryId > 0 ? categoryId : '';
+
+      dispatch(
+        fetchItems({
+          sortBy,
+          orderBy,
+          category: String(category),
+          currentPage,
+        }),
       );
-      setPizzas(data);
-      setIsLoading(true);
     };
-    fetchPizzas();
+    fetchItemsData();
     window.scrollTo(0, 0);
-  }, [categoryId, currentPage, searchValue]);
+  }, [categoryId, currentPage, searchValue, sort]);
 
   const onClickCategory = React.useCallback((idx: number) => {
     dispatch(setCategoryId(idx));
     onChangePage(1);
   }, []);
 
+  const onChangeSort = (obj: SortType) => {
+    dispatch(setSort(obj));
+  };
+
   const onChangePage = (page: number) => {
     dispatch(setCurrentPage(page));
   };
 
-  const items = pizzas
+  const data = items
     .filter((obj: any) => {
       if (obj.title.toLowerCase().includes(searchValue)) {
         return true;
@@ -58,11 +66,20 @@ const Home: React.FC = () => {
     <div className="container">
       <div className="content__top">
         <Categories id={categoryId} onClickCategory={onClickCategory} />
-        <Sort />
+        <Sort onChangeSort={onChangeSort} value={sort} />
       </div>
       <h2 className="content__title">Все пиццы</h2>
-      <div className="content__items">{isLoading ? items : skeletons}</div>
-      <Pagination onChangePage={onChangePage} currentPage={currentPage} />
+      {isLoading === 'error' ? (
+        <div className="content__error">
+          <h2>Произошла ошибка</h2>
+          <a href="/">Попробуйте повторить попытку позже.</a>
+        </div>
+      ) : (
+        <>
+          <div className="content__items">{isLoading === 'loading' ? skeletons : data}</div>
+          <Pagination onChangePage={onChangePage} currentPage={currentPage} />
+        </>
+      )}
     </div>
   );
 };

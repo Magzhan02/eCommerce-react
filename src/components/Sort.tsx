@@ -1,19 +1,28 @@
 import React from 'react';
 
+import { Sort as SortType, SortPropertyEnum } from '../redux/filter/types';
+
+type SortProps = {
+  onChangeSort: (obj: SortType) => void;
+  value: SortType;
+};
+
 type PopupClick = MouseEvent & {
   path: Node[];
 };
 
-const sortPopup = [
-  { name: 'популярности', sortProperty: 'rating' },
-  { name: 'цене', sortProperty: 'price' },
-  { name: 'алфавиту', sortProperty: 'title' },
+const sortPopup: SortType[] = [
+  { name: 'популярности (DESC)', sortProperty: SortPropertyEnum.RATING_DESC },
+  { name: 'популярности (ASC)', sortProperty: SortPropertyEnum.RATING_ASC },
+  { name: 'цене (DESC)', sortProperty: SortPropertyEnum.PRICE_DESC },
+  { name: 'цене (ASC)', sortProperty: SortPropertyEnum.PRICE_ASC },
+  { name: 'алфавиту (DESC)', sortProperty: SortPropertyEnum.TITLE_DESC },
+  { name: 'алфавиту (ASC)', sortProperty: SortPropertyEnum.TITLE_ASC },
 ];
 
-const Sort: React.FC = () => {
+const Sort: React.FC<SortProps> = ({ onChangeSort, value }) => {
   const sortRef = React.useRef<HTMLDivElement>(null);
   const [open, setOpen] = React.useState(false);
-  const [value, setValue] = React.useState('популярности');
 
   React.useEffect(() => {
     const handleOutsideClick = (event: MouseEvent) => {
@@ -27,8 +36,8 @@ const Sort: React.FC = () => {
     return () => document.body.removeEventListener('click', handleOutsideClick);
   }, []);
 
-  const sortPopupToggle = (obj: any) => {
-    setValue(obj.name);
+  const sortPopupToggle = (obj: SortType) => {
+    onChangeSort(obj);
     setOpen(false);
   };
 
@@ -47,7 +56,7 @@ const Sort: React.FC = () => {
           />
         </svg>
         <b>Сортировка по:</b>
-        <span onClick={() => setOpen(!open)}>{value}</span>
+        <span onClick={() => setOpen(!open)}>{value.name}</span>
       </div>
       {open && (
         <div className="sort__popup">
@@ -55,7 +64,7 @@ const Sort: React.FC = () => {
             {sortPopup.map((obj, i) => (
               <li
                 key={i}
-                className={value === obj.name ? 'active' : ' '}
+                className={value.name == obj.name ? 'active' : ' '}
                 onClick={() => sortPopupToggle(obj)}>
                 {obj.name}
               </li>
