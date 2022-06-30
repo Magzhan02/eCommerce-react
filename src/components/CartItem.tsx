@@ -1,21 +1,56 @@
 import React from 'react';
 
-const CartItem: React.FC = () => {
+import { useDispatch } from 'react-redux';
+import { CartItemsType } from '../redux/cart/types';
+import { setCartItems, removeCartItems, deleteCartItems } from '../redux/cart/slice';
+
+type CartItemProps = {
+  id: string;
+  title: string;
+  price: number;
+  imageUrl: string;
+  type: string;
+  size: number;
+  count: number;
+};
+
+const CartItem: React.FC<CartItemProps> = ({ id, title, price, imageUrl, type, size, count }) => {
+  const dispatch = useDispatch();
+
+  const onClickAdd = () => {
+    dispatch(
+      setCartItems({
+        id,
+      } as CartItemsType),
+    );
+  };
+
+  const onClickRemove = () => {
+    if (--count <= 0) {
+      dispatch(deleteCartItems(id));
+    }
+    dispatch(removeCartItems(id));
+  };
+
+  const onClickDelete = () => {
+    dispatch(deleteCartItems(id));
+  };
+
   return (
     <div className="cart__item">
       <div className="cart__item-img">
-        <img
-          className="pizza-block__image"
-          src="https://dodopizza.azureedge.net/static/Img/Products/f035c7f46c0844069722f2bb3ee9f113_584x584.jpeg"
-          alt="Pizza"
-        />
+        <img className="pizza-block__image" src={imageUrl} alt="Pizza" />
       </div>
       <div className="cart__item-info">
-        <h3>Пепперони Фреш с перцем</h3>
-        <p>традиционное, 30 см.</p>
+        <h3>{title}</h3>
+        <p>
+          {type}, {size} см.
+        </p>
       </div>
       <div className="cart__item-count">
-        <button className="button button--outline button--circle cart__item-count-minus">
+        <button
+          className="button button--outline button--circle cart__item-count-minus"
+          onClick={onClickRemove}>
           <svg
             width="10"
             height="10"
@@ -30,8 +65,10 @@ const CartItem: React.FC = () => {
               fill="#EB5A1E"></path>
           </svg>
         </button>
-        <b>1</b>
-        <button className="button button--outline button--circle cart__item-count-plus">
+        <b>{count}</b>
+        <button
+          className="button button--outline button--circle cart__item-count-plus"
+          onClick={onClickAdd}>
           <svg
             width="10"
             height="10"
@@ -48,9 +85,9 @@ const CartItem: React.FC = () => {
         </button>
       </div>
       <div className="cart__item-price">
-        <b>803 $</b>
+        <b>{price} $</b>
       </div>
-      <div className="cart__item-remove">
+      <div className="cart__item-remove" onClick={onClickDelete}>
         <div className="button button--outline button--circle">
           <svg
             width="10"

@@ -1,4 +1,11 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
+
+import { setCartItems } from '../../redux/cart/slice';
+import { CartItemsType } from '../../redux/cart/types';
+import { getCartItemsById } from '../../redux/cart/selector';
+
+import { useAppDispatch } from '../../redux/store';
 
 const typeNames = ['тонкое', 'традиционное'];
 
@@ -13,8 +20,25 @@ type CardItemsProps = {
 };
 
 const Card: React.FC<CardItemsProps> = ({ id, title, price, imageUrl, sizes, types }) => {
+  const dispatch = useAppDispatch();
+  const cartItems = useSelector(getCartItemsById(id));
   const [activeType, setActiveType] = React.useState(0);
   const [activeSize, setActiveSize] = React.useState(0);
+
+  const itemCountInCart = cartItems ? cartItems.count : 0;
+
+  const addItemToCart = () => {
+    const item: CartItemsType = {
+      id,
+      title,
+      price,
+      imageUrl,
+      type: typeNames[activeType],
+      size: sizes[activeSize],
+      count: 0,
+    };
+    dispatch(setCartItems(item));
+  };
 
   return (
     <div className="pizza-block-wrapper">
@@ -45,7 +69,7 @@ const Card: React.FC<CardItemsProps> = ({ id, title, price, imageUrl, sizes, typ
         </div>
         <div className="pizza-block__bottom">
           <div className="pizza-block__price">от {price} $</div>
-          <div className="button button--outline button--add">
+          <div className="button button--outline button--add" onClick={addItemToCart}>
             <svg
               width="12"
               height="12"
@@ -58,7 +82,7 @@ const Card: React.FC<CardItemsProps> = ({ id, title, price, imageUrl, sizes, typ
               />
             </svg>
             <span>Добавить</span>
-            <i>0</i>
+            <i>{itemCountInCart}</i>
           </div>
         </div>
       </div>

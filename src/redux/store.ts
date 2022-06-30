@@ -3,11 +3,13 @@ import { useDispatch } from 'react-redux';
 
 import filter from './filter/slice';
 import items from './items/slice';
+import cart from './cart/slice';
 
 export const store = configureStore({
   reducer: {
     filter,
     items,
+    cart,
   },
 });
 
